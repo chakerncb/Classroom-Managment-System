@@ -25,8 +25,11 @@ router.get('/logout', AuthController.logout);
 router.get('/teachers',CheckAdmin , (req, res) => {
     res.render('admin/teachers', { title: 'Teachers' });
 });
-
 router.get('/teachers/data',CheckAdmin, TeachersController.getTeachers);
+router.post('/teachers',CheckAdmin, TeachersController.createTeacher);
+router.post('/teachers/delete',CheckAdmin, TeachersController.deleteTeacher);
+router.post('/teachers/edit',CheckAdmin, TeachersController.editTeacher);
+router.post('/teachers/update',CheckAdmin, TeachersController.updateTeacher);
 
 
 
