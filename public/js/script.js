@@ -6,4 +6,5 @@ function openForm() {
 
 function closeForm() {
     document.getElementById("modal-form").style.display = "none";
+    document.getElementById('passwordField').style.display = 'block';
 }

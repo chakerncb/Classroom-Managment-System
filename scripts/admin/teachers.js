@@ -154,7 +154,7 @@ async function deleteTeacher(id) {
 async function editTeacher(id) {
     document.querySelector('.form-title').textContent = 'Edit Teacher';    
     document.getElementById('modal-form').style.display = 'block';
-    document.getElementById('registrationForm').action = '/admin/teachers/update';
+    // document.getElementById('registrationForm').action = '/admin/teachers/update'
 
     const response = await fetch('/admin/teachers/edit', {
         method: 'POST',

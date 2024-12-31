@@ -77,7 +77,7 @@ createTeacher = async (req, res) => {
             [code, fname, lname, grade, email, passwordHash]
         );
         connection.execute('commit');
-        console.log(result);
+        // console.log(result);
         res.json({ success: true, message: 'Teacher created successfully' });
         await connection.close();
     } catch (err) {
@@ -139,7 +139,7 @@ updateTeacher = async (req, res) => {
     const { id, fname, lname, grade, email } = req.body;
     const connection = await oracle();
 
-    console.log(id);
+    // console.log(id);
 
     if (!id || !fname || !lname || !grade || !email) {
         return res.json({ success: false, message: 'All fields are required' });
