@@ -4,6 +4,7 @@ const AuthController = require('../controllers/Admin/AuthController');
 const CheckAdmin = require('../middleware/AdminAuthinticate');
 const TeachersController = require('../controllers/Admin/TeachersController');
 const StudentsController = require('../controllers/Admin/StudentsController');
+const ModulesController = require('../controllers/Admin/ModulesController');
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -51,6 +52,18 @@ router.post('/students/update',CheckAdmin, StudentsController.updateStudent);
 
 
 
+// Groups routes
+
+
+   // TODO: Add the groups routes
+
+
+// Moudules routes
+
+router.get('/modules',CheckAdmin , (req, res) => {
+    res.render('admin/modules', { title: 'Modules' });
+});
+router.get('/modules/data',CheckAdmin, ModulesController.getModules);
 
 
 

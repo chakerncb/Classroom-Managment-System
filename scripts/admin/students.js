@@ -17,8 +17,8 @@ async function getStudents() {
                 <td>${student.speciality}</td>
                 <td>${student.groupe}</td>
                 <td>
-                    <button class="btn btn-primary" onclick="editStudent(${student.code})">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteStudent(${student.code})">Delete</button>
+                    <a class="text-primary" onclick="editStudent(${student.code})"><i class="bi bi-pencil-square"></i></a>
+                    <a class="text-danger" onclick="deleteStudent(${student.code})"><i class="bi bi-trash3-fill"></i></a>
                 </td>
             `;
             Studentstable.appendChild(row);
