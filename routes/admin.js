@@ -64,6 +64,8 @@ router.get('/modules',CheckAdmin , (req, res) => {
     res.render('admin/modules', { title: 'Modules' });
 });
 router.get('/modules/data',CheckAdmin, ModulesController.getModules);
+router.post('/modules',CheckAdmin, ModulesController.createModule);
+router.post('/modules/type',CheckAdmin, ModulesController.createType);
 
 
 

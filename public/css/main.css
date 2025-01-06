@@ -127,3 +127,47 @@
     background-color: #FBF1DD;
     color: #8A6D3B;
   }
+
+  .modules-constainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .module-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 5%;
+  }
+
+  .card-header {
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .semester-header {
+    margin-bottom: 1rem;
+    padding: 5%;
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 1.15%;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
