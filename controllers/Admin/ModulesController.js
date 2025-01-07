@@ -98,4 +98,59 @@ createType = async (req, res) => {
     }
 }
 
-module.exports = { getModules , createModule , createType };
+
+deleteType = async (req, res) => {
+    const { id , module_id} = req.body;
+    console.log(id , module_id);
+    try {
+        const connection = await oracle();
+        // Delete child records in related table(s) first
+        await connection.execute('DELETE FROM attend WHERE IDTM = :IDTM', [id]);
+        const result = await connection.execute('DELETE FROM typemodule WHERE ID = :ID AND IDM = :IDM ', [id , module_id]);
+        await connection.execute('COMMIT');
+        if (result.rowsAffected > 0) {
+            res.json({ success: true, message: 'Type deleted successfully' });
+        } else {
+            console.log(result);
+            res.json({ success: false, message: 'Failed to delete type' });
+        }
+        await connection.close();
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+getTypes = async (req, res) => {
+    const { moduleId } = req.body;
+
+    try {
+        const connection = await oracle();
+        const result = await connection.execute('SELECT * FROM typemodule WHERE IDM = :IDM', [moduleId]);
+        const result2 = await connection.execute('SELECT SEMESTER , LEVELM FROM module WHERE IDM = :IDM', [moduleId]);
+
+        if (result.rows.length > 0) {
+            const types = [];
+            const semester = result2.rows[0][0];
+            const level = result2.rows[0][1];
+            for (let i = 0; i < result.rows.length; i++) {
+                types.push({
+                    id: result.rows[i][0],
+                    module_id: result.rows[i][1],
+                    name: result.rows[i][2],
+                    teacher_id: result.rows[i][3],
+                });
+            }
+
+            res.json({ success: true, types , semester , level });
+        } else {
+            res.json({ success: false, types: [] });
+        }
+        await connection.close();
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+module.exports = { getModules , createModule , createType  , deleteType , getTypes };

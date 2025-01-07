@@ -5,6 +5,8 @@ const CheckAdmin = require('../middleware/AdminAuthinticate');
 const TeachersController = require('../controllers/Admin/TeachersController');
 const StudentsController = require('../controllers/Admin/StudentsController');
 const ModulesController = require('../controllers/Admin/ModulesController');
+const ScheduleController = require('../controllers/Admin/ScheduleController');
+const classroomController = require('../controllers/Admin/ClassroomController');
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -66,8 +68,23 @@ router.get('/modules',CheckAdmin , (req, res) => {
 router.get('/modules/data',CheckAdmin, ModulesController.getModules);
 router.post('/modules',CheckAdmin, ModulesController.createModule);
 router.post('/modules/type',CheckAdmin, ModulesController.createType);
+router.post('/modules/type/data',CheckAdmin, ModulesController.getTypes);
+router.post('/modules/type/delete',CheckAdmin, ModulesController.deleteType);
 
 
+
+// Schedule routes
+
+router.get('/schedules', CheckAdmin, (req, res) => {
+    res.render('admin/schedules', { title: 'Schedules' });
+});
+router.get('/schedules/data', CheckAdmin, ScheduleController.getSchedules);
+router.post('/schedules', CheckAdmin, ScheduleController.createSchedule);
+
+
+// classroom routes
+
+router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
 
 
 module.exports = router;

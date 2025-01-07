@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<%- include('partials/head') %>
+
+<body id="page-top">
+       <%- include('partials/alertFields') %>
+    <div id="wrapper">
+
+        <%- include('partials/sideBar') %>
+        
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+               
+                <%- include('partials/navBar') %>
+
+                <div class="container-fluid">
+                    <h3 class="text-dark ">Schedules</h3>
+                    <div class="card shadow">
+                        <div class="card-header py-3 flex-column justify-content-between align-items-center"> 
+                            <p class="text-primary m-0 fw-bold">RTW</p>
+                            <button style="float: right;" class="btn btn-primary" onclick="openScheduleForm()">Add Schedule</button>
+                        </div>
+                        <div class="schedule-container row">
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('sunday')">
+                                    <h6 class="text-primary fw-bold m-0">Sunday</h6>
+                                </div>
+                                <ul id="sunday" class="list-group list-group-flush">
+                                    <!-- <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li> -->
+                                    <button style="width: 100%;" onclick="openScheduleForm('Sunday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('Monday')">
+                                    <h6 class="text-primary fw-bold m-0">Monday</h6>
+                                </div>
+                                <ul id="Monday" class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <button style="width: 100%;" onclick="openScheduleForm('Monday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('Tuesday')">
+                                    <h6 class="text-primary fw-bold m-0">Tuesday</h6>
+                                </div>
+                                <ul id="Tuesday" class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <button style="width: 100%;" onclick="openScheduleForm('Tuesday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('Wednesday')">
+                                    <h6 class="text-primary fw-bold m-0">Wednesday</h6>
+                                </div>
+                                <ul id="Wednesday" class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <button style="width: 100%;" onclick="openScheduleForm('Wednesday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('Thursday')">
+                                    <h6 class="text-primary fw-bold m-0">Thursday</h6>
+                                </div>
+                                <ul id="Thursday" class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <button style="width: 100%;" onclick="openScheduleForm('Thursday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+
+                            <div class="card-day shadow ">
+                                <div class="card-header py-3" onclick="toggleDay('Saturday')">
+                                    <h6 class="text-primary fw-bold m-0">Saturday</h6>
+                                </div>
+                                <ul id="Saturday" class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">10:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">11:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <h6 class="mb-0"><strong>Lunch meeting</strong></h6><span class="text-xs">12:30 AM</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-3"><label class="form-check-label" for="formCheck-3"></label></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <button style="width: 100%;" onclick="openScheduleForm('Saturday')"><i class="bi bi-plus"></i></button>
+                                </ul>
+                            </div>
+
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                </div>
+            </footer>
+
+
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        <div id="modal-form" class="modal-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="form-title"><b>New Schedule:</b></h5>
+                    <button type="button" class="btn-close" onclick="closeScheduleForm()"></button>
+                </div>
+                <form id="scheduleForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="day" name="day_of_week">
+                    <div class="mb-3">
+                        <label for="idm" class="form-label">Module ID</label>
+                        <select id="module-select" name="idm" class="form-control" required>
+                            <option value="" >Select Module</option>
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="idtm" class="form-label">Type Module</label>
+                        <select id="type-select" name="idtm" class="form-control">
+                            <option value="" >Select Type Module</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="semester" class="form-label">Semester</label>
+                        <input type="number" id="semester" name="semester" class="form-control" disabled required>
+                    </div>    
+                    <div class="mb-3">
+                        <label for="level_name" class="form-label">Level Name</label>
+                        <input type="text" id="level" name="level_name" class="form-control" disabled required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="code_c" class="form-label">Classroom Code</label>
+                        <select id="classroom-select" name="code_c" class="form-control" required>
+                            <option value="" >Select Classroom</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start_time" class="form-label">Start Time</label>
+                        <input type="time" id="start_time" name="start_time" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_time" class="form-label">End Time</label>
+                        <input type="time" id="end_time" name="end_time" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeScheduleForm()">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/js/bs-init.js"></script>
+    <script src="/public/js/theme.js"></script>
+    <script src="/scripts/admin/schedule.js"></script>
+    <script src="/public/js/script.js"></script>
+
+</body>
+</html>

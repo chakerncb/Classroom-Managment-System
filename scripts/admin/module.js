@@ -51,6 +51,7 @@ async function getModules () {
                                             <th>id</th>
                                             <th>Type</th>
                                             <th>Teacher</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,6 +60,9 @@ async function getModules () {
                                                 <td>${type.id}</td>
                                                 <td>${type.name}</td>
                                                 <td>${type.teacher}</td>
+                                                <td>
+                                                    <a class="" onclick="deleteType(${type.id}, ${module.id})"><i class="bi bi-trash3" style="color: red;"></i></a>
+                                                </td>
                                             </tr>
                                         `).join('')}
                                         <tr id="addType-${module.id}">
@@ -191,6 +195,38 @@ async function addType(module_id) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            document.querySelector('.message-success').innerText = result.message;
+            document.querySelector('.message-success').style.display = 'block';
+            document.querySelector('.message-danger').style.display = 'none';
+            setTimeout(() => {
+                document.querySelector('.message-success').style.display = 'none';
+            }, 3000);
+            getModules();
+        } else if (result.message) {
+            document.querySelector('.message-danger').innerText = result.message;
+            document.querySelector('.message-danger').style.display = 'block';
+            setTimeout(() => {
+                document.querySelector('.message-danger').style.display = 'none';
+            }, 3000);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function deleteType(id , module_id) {
+    try {
+        const response = await fetch('/admin/modules/type/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id , module_id }),
         });
 
         const result = await response.json();
