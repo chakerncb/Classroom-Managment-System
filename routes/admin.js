@@ -79,7 +79,7 @@ router.get('/schedules', CheckAdmin, (req, res) => {
     res.render('admin/schedules', { title: 'Schedules' });
 });
 router.get('/schedules/data', CheckAdmin, ScheduleController.getSchedules);
-router.post('/schedules', CheckAdmin, ScheduleController.createSchedule);
+router.post('/schedule/add', CheckAdmin, ScheduleController.createSchedule);
 
 
 // classroom routes
