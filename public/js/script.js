@@ -33,4 +33,3 @@ function toggleDay(dayId) {
     const dayElement = document.getElementById(dayId);
     dayElement.style.display = dayElement.style.display === 'none' ? 'block' : 'none';
 }
-

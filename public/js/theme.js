@@ -7,7 +7,17 @@
   if (sidebar) {
     
     var collapseEl = sidebar.querySelector('.collapse');
-    var collapseElementList = [].slice.call(document.querySelectorAll('.sidebar .collapse'))
+    var collapseElementList = [].slice.call(document.querySelectorAll('.sidebar .collapse'));
+
+    // Close the sidebar when opened on a phone
+    var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw <= 768) {
+      sidebar.classList.add('toggled');
+      for (var bsCollapse of collapseElementList) {
+      bsCollapse.classList.remove('show');
+      }
+    }
+
     var sidebarCollapseList = collapseElementList.map(function (collapseEl) {
       return new bootstrap.Collapse(collapseEl, { toggle: false });
     });

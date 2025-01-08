@@ -60,6 +60,11 @@ router.post('/students/update',CheckAdmin, StudentsController.updateStudent);
    // TODO: Add the groups routes
 
 
+// Levels routes
+
+   // TODO: Add the levels routes
+
+
 // Moudules routes
 
 router.get('/modules',CheckAdmin , (req, res) => {
@@ -80,6 +85,7 @@ router.get('/schedules', CheckAdmin, (req, res) => {
 });
 router.get('/schedules/data', CheckAdmin, ScheduleController.getSchedules);
 router.post('/schedule/add', CheckAdmin, ScheduleController.createSchedule);
+router.post('/schedule/delete', CheckAdmin, ScheduleController.deleteSchedule);
 
 
 // classroom routes

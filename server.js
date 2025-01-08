@@ -5,6 +5,7 @@ const port = process.env.APP_PORT;
 const oracle = require('./config/db');
 const session = require('express-session');
 const path = require('path');
+const AuthController = require('./controllers/AuthController');
 
 app.use(express.json());
 app.use('/public', express.static(__dirname + '/public'));
@@ -19,24 +20,32 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-const adminRoutes = require('./routes/admin');
-app.use('/admin', adminRoutes);
 
-app.get('/oracle', async (req, res) => {
-    try {
-        const connection = await oracle();
-        const result = await connection.execute('SELECT * FROM teacher');
-        res.json(result.rows);
-        await connection.close();
-    } catch (err) {
-        console.error(err);
-        res.sendStatus(500);
-    }
-});
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+// users login
+
+app.get('/login', (req, res) => {
+    res.render('auth/login', { title: 'Login' });
+});
+
+app.post('/login', AuthController.login);
+
+app.get('/logout', AuthController.logout);
+
+
+
+
+const adminRoutes = require('./routes/admin');
+app.use('/admin', adminRoutes);
+
+const teacherRoutes = require('./routes/teacher');
+app.use('/teacher', teacherRoutes);
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

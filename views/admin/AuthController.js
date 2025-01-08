@@ -1,4 +1,4 @@
-const oracle = require('../../config/db');
+const oracle = require('../config/db');
 const bcrypt = require('bcryptjs');
 
 
@@ -12,37 +12,37 @@ const bcrypt = require('bcryptjs');
 
     if (!email || !password) {
         message = 'Please provide an email and password';
-        return res.render('admin/auth/login', { message });
+        return res.render('auth/login', { message });
     }
 
     try {
         const connection = await oracle();
-        const result = await connection.execute('SELECT * FROM admin WHERE email = :email', [email]);
+        const result = await connection.execute('SELECT * FROM teacher WHERE EMAIL = :email', [email]);
         const user = {
             id: result.rows[0][0],
             username: result.rows[0][1],
-            email: result.rows[0][2],
+            email: result.rows[0][4],
             password: result.rows[0][3]
         };
 
+        console.log(email, password, user);
+
         if (!user) {
             message = 'Invalid email or password';
-            return res.render('admin/auth/login', { message });
+            return res.render('auth/login', { message });
         }
 
         if (!bcrypt.compareSync(password, user.password)) {
             message = 'Invalid email or password';
-            return res.render('admin/auth/login', { message });
+            return res.render('auth/login', { message });
         }
 
-        req.session.admin = true;
         req.session.user = user;
-        
         res.redirect('/admin/');
     } catch (error) {
         console.error(error);
         message = 'Invalid email or password';
-        res.render('admin/auth/login', { message });
+        res.render('auth/login', { message });
     } 
 }
 
@@ -51,7 +51,7 @@ logout = (req, res) => {
         if (err) {
             return console.log(err);
         }
-        res.redirect('/admin/login');
+        res.redirect('/login');
     });
 }
 

@@ -184,6 +184,27 @@
     padding-right: 5%;
   }
 
+  @media (max-width: 768px) {
+    .schedule-container {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      align-items: center;
+    }
+
+    #promo-card {
+      padding: 5%;
+    }
+
+    .modules-constainer {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .card-day {
+      margin: 5%;
+      width: 100%;
+    }
+
+  }
+
 
   .card-day {
     width: 90%;

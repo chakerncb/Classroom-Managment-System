@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     getModules();
     getClassrooms();
     getSchedules();
+    getGroups();
 });
 
 async function getModules() {
@@ -77,6 +78,25 @@ async function getClassrooms() {
     }
 }
 
+async function getGroups(){
+
+    const groupsSelect = document.getElementById('group-select');
+    try {
+        const response = await fetch('/admin/students/groupe');
+        const data = await response.json();
+        console.log(data);
+        data.sort((a, b) => a.id - b.id).forEach(group => {
+            const option = document.createElement('option');
+            option.value = group.id;
+            option.text = group.name;
+            groupsSelect.appendChild(option);
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
 
 document.querySelector('form#scheduleForm').addEventListener('submit', async (event) => {
      event.preventDefault();
@@ -104,7 +124,7 @@ document.querySelector('form#scheduleForm').addEventListener('submit', async (ev
                 setTimeout(() => {
                     document.querySelector('.message-success').style.display = 'none';
                 }, 3000);
-                // ();
+                getSchedules();
             } else if (result.message) {
                 document.querySelector('.message-danger').innerText = result.message;
                 document.querySelector('.message-danger').style.display = 'block';
@@ -121,7 +141,8 @@ document.querySelector('form#scheduleForm').addEventListener('submit', async (ev
 
 async function getSchedules() {
 
-    const promoCard = document.getElementById('promo-card'); 
+    const promoCard = document.getElementById('promo-card');
+    promoCard.innerHTML = '';
 
     try {
         const response = await fetch('/admin/schedules/data');
@@ -155,7 +176,6 @@ async function getSchedules() {
             dayTitle.className = 'text-primary fw-bold m-0';
             dayTitle.innerText = day;
             dayHeader.appendChild(dayTitle);
-            cardDay.appendChild(dayHeader);
 
             const dayList = document.createElement('ul');
             dayList.id = day.toLowerCase();
@@ -165,18 +185,35 @@ async function getSchedules() {
                 const listItem = document.createElement('li');
                 console.log(schedule);
                 listItem.className = 'list-group-item';
-                listItem.innerHTML = `<h6 style="color:black;" >${schedule.module} (${schedule.type})<h6>${schedule.start_time} - ${schedule.end_time} (${schedule.code_c}) <br>`;
+                listItem.innerHTML = `
+                <div class="btn-group" style="float:right;">
+                        <button class="btn btn-sm" onclick="deleteSchedule(${schedule.id})" style="margin-left: 10px;">
+                            <i style="color:red;"  class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    <h6 style="color:black;">${schedule.module} (${schedule.type})</h6>
+                    <p>${schedule.start_time} - ${schedule.end_time} (${schedule.code_c}-${schedule.groupe})</p>
+                `;
                 dayList.appendChild(listItem);
             });
 
             const addButton = document.createElement('button');
-            addButton.style.width = '100%';
-            addButton.style.marginTop = '5px';
+            addButton.style.width = '10%';
+            addButton.style.float = 'right';
+            addButton.style.align = 'center';
+            addButton.style.marginTop = '-5%';
+            addButton.className = 'btn ';
+            addButton.style.backgroundColor = 'transparent';
+            addButton.style.border = 'black';
+            addButton.style.color = 'black';
+            addButton.style.borderRadius = '50%';
             addButton.onclick = () => openScheduleForm(day);
             const addIcon = document.createElement('i');
             addIcon.className = 'bi bi-plus';
             addButton.appendChild(addIcon);
-            dayList.appendChild(addButton);
+            dayTitle.appendChild(addButton);
+            cardDay.appendChild(dayHeader);
+
 
             cardDay.appendChild(dayList);
             scheduleContainer.appendChild(cardDay);
@@ -193,4 +230,33 @@ async function getSchedules() {
 }
 
 
+async function deleteSchedule(id) {
+    try {
+        const response = await fetch('/admin/schedule/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+        });
+        const result = await response.json();
+        if (result.success) {
+            document.querySelector('.message-success').innerText = result.message;
+            document.querySelector('.message-success').style.display = 'block';
+            document.querySelector('.message-danger').style.display = 'none';
+            
+            setTimeout(() => {
+                document.querySelector('.message-success').style.display = 'none';
+            }, 3000);
+            getSchedules();
+        } else if (result.message) {
+            document.querySelector('.message-danger').innerText = result.message;
+            document.querySelector('.message-danger').style.display = 'block';
+            setTimeout(() => {
+                document.querySelector('.message-danger').style.display = 'none';
+            }, 3000);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
 
