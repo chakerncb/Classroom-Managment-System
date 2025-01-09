@@ -57,7 +57,7 @@ body {
   
   .schedule-table table tbody td.active {
     position: relative;
-    z-index: 10;
+    z-index: -1 !important;
     transition: all 0.3s linear 0s;
     min-width: 150px; 
   }
@@ -80,6 +80,7 @@ body {
     font-size: 20px;
     color: #ffffff;
     margin-bottom: 5px;
+
   }
   
   .schedule-table table tbody td .hover p {
@@ -115,7 +116,7 @@ body {
     width: 120%;
     height: 120%;
     transform: translate(-50%, -50%) scale(0.8);
-    z-index: 99;
+    z-index: 990;
     background: #86d4f5;
     border-radius: 0.25rem;
     padding: 20px 0; 

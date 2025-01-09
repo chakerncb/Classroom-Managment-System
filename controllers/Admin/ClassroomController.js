@@ -1,8 +1,8 @@
-const db = require('../../config/db');
+const oracle = require('../../config/db');
 
 getClassrooms = async (req, res) => {
     try {
-        const connection = await db();
+        const connection = await oracle();
         const result = await connection.execute('SELECT * FROM classroom');
         if (result.rows.length > 0) {
             const classrooms = [];
