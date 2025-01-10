@@ -52,8 +52,8 @@ getSessions = async (req, res) => {
 
 getSessionStudents = async (req, res) => {
     const {sessionId} = req.body;
+    let date = new Date().toISOString().split('T')[0];
 
-    // console.log(sessionId);
     try {
         const connection = await oracle();
         const session = await connection.execute('SELECT * FROM schedule WHERE SCHEDULE_ID = :SCHEDULE_ID', { SCHEDULE_ID: sessionId });
@@ -70,7 +70,18 @@ getSessionStudents = async (req, res) => {
             for (let i = 0; i < result.rows.length; i++) {
 
                 const groupeResults = await connection.execute('SELECT NAME FROM groupe WHERE ID_G = :ID_G', { ID_G: result.rows[i][5] });
+                const attendanceResults = await connection.execute('SELECT * FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\') AND SESSION_ID = :SESSION_ID', { CODE_S: result.rows[i][0], S_DATE: date, SESSION_ID: sessionId });
 
+                if (attendanceResults.rows.length > 0) {
+                    students.push({
+                        id: result.rows[i][0],
+                        firstName: result.rows[i][1],
+                        lastName: result.rows[i][2],
+                        level: result.rows[i][3],
+                        groupe: groupeResults.rows[0][0],
+                        attendance: true
+                    });
+                } else {
                 students.push({
                     id: result.rows[i][0],
                     firstName: result.rows[i][1],
@@ -78,6 +89,7 @@ getSessionStudents = async (req, res) => {
                     level: result.rows[i][3],
                     groupe: groupeResults.rows[0][0],
                 });
+            }
             }
             res.json(students);
         } else {
@@ -95,8 +107,9 @@ getSessionStudents = async (req, res) => {
 
 storeAttendance = async (req, res) => {
     const { sessionId, students } = req.body;
-    console.log(sessionId , students);
     let date = new Date().toISOString().split('T')[0];
+
+    console.log(students);
     
     try {
         const connection = await oracle();
@@ -111,13 +124,21 @@ storeAttendance = async (req, res) => {
             IDTM : result.rows[0][2]
         }
 
-        console.log(session);
         
-        students.forEach(async student => {
-            await connection.execute('INSERT INTO attend (S_DATE, F_DATE, CODE_C, CODE_S, IDM, IDT, IDTM) VALUES (TO_DATE(:S_DATE, \'YYYY-MM-DD\'), TO_DATE(:F_DATE, \'YYYY-MM-DD\'),  :CODE_C, :CODE_S, :IDM, :IDT, :IDTM)', { S_DATE: date, F_DATE: date, CODE_C: session.Code_C, CODE_S: student.id, IDM: session.IDM, IDT: session.IDT, IDTM: session.IDTM });
-        });
+        for (const student of students) {
+
+            const studentExist = await connection.execute('SELECT * FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\') AND SESSION_ID = :SESSION_ID', { CODE_S: student.id, S_DATE: date, SESSION_ID: sessionId });
+
+            if (studentExist.rows.length == 0 && student.attendance == true) {
+                await connection.execute('INSERT INTO attend (S_DATE, F_DATE, CODE_C, CODE_S, IDM, IDT, IDTM , SESSION_ID) VALUES (TO_DATE(:S_DATE, \'YYYY-MM-DD\'), TO_DATE(:F_DATE, \'YYYY-MM-DD\'),  :CODE_C, :CODE_S, :IDM, :IDT, :IDTM , :SESSION_ID)', { S_DATE: date, F_DATE: date, CODE_C: session.Code_C, CODE_S: student.id, IDM: session.IDM, IDT: session.IDT, IDTM: session.IDTM , SESSION_ID: sessionId });
+            } else if (studentExist.rows.length > 0 && student.attendance == false) {
+                await connection.execute('DELETE FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\') AND SESSION_ID = :SESSION_ID', { CODE_S: student.id, S_DATE: date, SESSION_ID: sessionId });
+            }
+
+        }
         await connection.execute('commit');
         await connection.close();
+
         res.json({ success : true , message: 'Attendance stored successfully' });
     }
     catch (err) {

@@ -8,8 +8,8 @@ async function getSessions() {
     const teacherId = document.getElementById('teacherId').value;
     const today = new Date().toISOString().split('T')[0];
     const dayName = new Date(today).toLocaleDateString('en-US', { weekday: 'long' });
-    // const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-    const time = '14:39';
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    // const time = '14:39';
     console.log(dayName);
     console.log(today);
     console.log(time);
@@ -88,7 +88,9 @@ async function studentList(sessionId) {
 
        // make a table of srudents with their information and attendance checkbox and status
          const table = document.createElement('table');
-            table.classList.add('table', 'table-striped', 'table-hover');
+            table.classList.add('table', 'table-striped', 'table-hover', 'table-bordered', 'mt-4');
+            table.style.width = '100%';
+            table.style.textAlign = 'center';
             table.innerHTML = `
             <thead>
                 <tr>
@@ -105,12 +107,11 @@ async function studentList(sessionId) {
             data.forEach(student => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td><input type="checkbox" class="form-check-input" id="attendance-${student.id}" ${student.attendance ? 'checked' : ''}></td>
-                <td>${student.firstName}</td>
-                <td>${student.lastName}</td>
-                <td>${student.level}</td>
-                <td>${student.groupe}</td>
-                <td><span class="text-bg-${student.attendance ? 'success' : 'danger'} rounded">${student.attendance ? 'Present' : 'Absent' }</span></td>
+                <td class="p-3"><input type="checkbox" class="form-check-input" id="attendance-${student.id}" ${student.attendance ? 'checked' : ''}></td>
+                <td class="p-3">${student.firstName}</td>
+                <td class="p-3">${student.lastName}</td>
+                <td class="p-3">${student.groupe}</td>
+                <td class="p-3"><span class="text-bg-${student.attendance ? 'success' : 'danger'} rounded-pill p-2 text-white">${student.attendance ? 'Present' : 'Absent' }</span></td>
                 `;
                 table.querySelector('tbody').appendChild(row);
             });
@@ -122,12 +123,10 @@ async function studentList(sessionId) {
             submitButton.addEventListener('click', async () => {
                 const students = [];
                 data.forEach(student => {
-                    if (document.getElementById(`attendance-${student.id}`).checked == true) {
                     students.push({
                         id: student.id,
                         attendance: document.getElementById(`attendance-${student.id}`).checked
                     });
-                }
                 });
                 await submitAttendance(students , sessionId);
             });
@@ -152,6 +151,8 @@ async function submitAttendance(students , sessionId) {
             },
             body: JSON.stringify({ sessionId: sessionId, students: students })
         });
+
+        const result = await response.json();
         if (result.success) {
             document.querySelector('.message-success').innerText = result.message;
             document.querySelector('.message-success').style.display = 'block';

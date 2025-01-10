@@ -377,10 +377,15 @@
                   <div class="card shadow">
                     <div class="card-header py-3 flex-column justify-content-between align-items-center"> 
                       <p class="card-title text-primary m-0 fw-bold">Today's Sessions :</p>
-                  </div>
-                  <div class="row p-5 align-items-center" id="sessions-container">
-                    <!-- Sessions will be dynamically inserted here -->
-                  </div>
+                    </div>
+                    <div class="row p-5 align-items-center" id="sessions-container">
+                      <!-- Sessions will be dynamically inserted here -->
+                    </div>
+                    <div id="loading-spinner" class="text-center my-3" style="display: none;">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
