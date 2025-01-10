@@ -362,6 +362,7 @@
 </style>
 
 <body id="page-top">
+    <%- include('partials/alertFields') %>
     <div id="wrapper">
         <%- include('partials/sidebar')  %>
         <div class="d-flex flex-column" id="content-wrapper">
@@ -375,7 +376,7 @@
                   <!-- Days -->
                   <div class="card shadow">
                     <div class="card-header py-3 flex-column justify-content-between align-items-center"> 
-                      <p class="text-primary m-0 fw-bold">Today's Sessions :</p>
+                      <p class="card-title text-primary m-0 fw-bold">Today's Sessions :</p>
                   </div>
                   <div class="row p-5 align-items-center" id="sessions-container">
                     <!-- Sessions will be dynamically inserted here -->

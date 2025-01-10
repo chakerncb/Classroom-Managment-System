@@ -26,5 +26,7 @@ router.get('/sessions', checkTeacher, (req, res) => {
 });
 
 router.get('/sessions/:teacherId/:dayName', checkTeacher, SessionsController.getSessions);
+router.post('/sessions/students', checkTeacher, SessionsController.getSessionStudents);
+router.post('/sessions/attendance', checkTeacher, SessionsController.storeAttendance);
 
 module.exports = router;
