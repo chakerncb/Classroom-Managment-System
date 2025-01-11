@@ -2,6 +2,8 @@ const oracle = require('../../config/db');
 
 getSessions = async (req, res) => {
      const teacherId = req.params.teacherId;
+
+    // FIXME: after testing remove this line and uncomment the line below .
     // const dayName = req.params.dayName;
     const dayName = 'Monday';
 
@@ -35,7 +37,6 @@ getSessions = async (req, res) => {
                     day: result.rows[i][7],
                     semester: result.rows[i][8],
                     groupe: groupeResults.rows[0][0]
-                    // teacher: result.rows[i][10],
                 });
             }
             res.json(schedule);
