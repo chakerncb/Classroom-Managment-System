@@ -164,6 +164,7 @@ async function getTeachers() {
     try {
         const response = await fetch('/admin/teachers/data');
         const result = await response.json();
+        console.log(result);
         const selects = document.querySelectorAll('.teacherSelect');
         selects.forEach(select => {
             select.innerHTML = '<option value="">Select Teacher</option>';

@@ -36,7 +36,8 @@ router.post('/sessions/attendance', checkTeacher, SessionsController.storeAttend
 router.get('/students', checkTeacher, (req, res) => {
     res.render('teacher/students', { title: 'Students' });
 });
-router.get('/students/data', checkTeacher, StudentsController.getStudents);
+router.post('/students/data', checkTeacher, StudentsController.getStudents);
+router.get('/modules/data', checkTeacher, StudentsController.getModules);
 
 
 module.exports = router;

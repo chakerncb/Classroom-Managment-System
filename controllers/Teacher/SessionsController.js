@@ -3,6 +3,7 @@ const oracle = require('../../config/db');
 getSessions = async (req, res) => {
      const teacherId = req.params.teacherId;
 
+
     // FIXME: after testing remove this line and uncomment the line below .
     // const dayName = req.params.dayName;
     const dayName = 'Monday';
