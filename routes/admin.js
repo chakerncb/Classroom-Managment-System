@@ -7,6 +7,7 @@ const StudentsController = require('../controllers/Admin/StudentsController');
 const ModulesController = require('../controllers/Admin/ModulesController');
 const ScheduleController = require('../controllers/Admin/ScheduleController');
 const classroomController = require('../controllers/Admin/ClassroomController');
+const AttendanceControoler = require('../controllers/Admin/AttendanceController');
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -53,7 +54,6 @@ router.post('/students/edit',CheckAdmin, StudentsController.editStudent);
 router.post('/students/update',CheckAdmin, StudentsController.updateStudent);
 
 
-
 // Groups routes
 
 
@@ -89,8 +89,17 @@ router.post('/schedule/delete', CheckAdmin, ScheduleController.deleteSchedule);
 
 
 // classroom routes
-
 router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
 
+
+// Attendance routes
+router.get('/attendance/students',CheckAdmin, (req, res) => {
+    res.render('admin/studentsAttendance', { title: 'Students Attendance' });
+});
+router.get('/attendance/students/data',CheckAdmin, AttendanceControoler.getStudents);
+
+router.post('/attendance/teachers',CheckAdmin, (req,res) => {
+    res.render('admin/teachersAttendance', { title: 'Teachers Attendance' });
+});
 
 module.exports = router;

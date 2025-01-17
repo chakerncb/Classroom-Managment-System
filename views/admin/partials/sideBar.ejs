@@ -10,6 +10,18 @@
                     <li class="nav-item"><a class="nav-link" href="/admin/students" style="transform: rotate(0deg) scale(0.97) skew(0deg);transform-origin: bottom;"><i class="bi bi-mortarboard" style="font-size: 18.6px;"></i><span style="font-size: medium;">Students</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/modules" style="transform: rotate(0deg) scale(0.97) skew(0deg);transform-origin: bottom;"><i class="bi bi-journal-text" style="font-size: 18.6px;"></i><span style="font-size: medium;">Modules</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/Schedules" style="transform: rotate(0deg) scale(0.97) skew(0deg);transform-origin: bottom;"><i class="bi bi-table" style="font-size: 18.6px;"></i><span style="font-size: medium;">Schedules</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAttendance" aria-expanded="false" aria-controls="collapseAttendance" style="transform: rotate(0deg) scale(0.97) skew(0deg);transform-origin: bottom;">
+                            <i class="bi bi-table" style="font-size: 18.6px;"></i>
+                            <span style="font-size: medium;">Attendance</span>
+                        </a>
+                        <div id="collapseAttendance" class="collapse" aria-labelledby="headingAttendance" data-bs-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="/admin/attendance/students">Students</a>
+                                <a class="collapse-item" href="/admin/attendance/teachers">Teachers</a>
+                            </div>
+                        </div>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="register.html" style="transform: rotate(0deg) scale(0.97) skew(0deg);transform-origin: bottom;"><i class="fas fa-user-circle" style="font-size: 18.6px;"></i><span style="font-size: medium;">Register</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>

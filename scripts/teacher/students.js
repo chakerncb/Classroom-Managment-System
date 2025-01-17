@@ -1,6 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     getModules();
+    getWeek();
 });
+
+function getWeek() {
+    const fromDate = document.getElementById('from');
+    const toDate = document.getElementById('to');
+
+    const today = new Date();
+    const firstDay = new Date(today.setDate(today.getDate() - today.getDay()));
+    const lastDay = new Date(today.setDate(today.getDate() - today.getDay() + 4));
+
+    fromDate.value = firstDay.toISOString().split('T')[0];
+    toDate.value = lastDay.toISOString().split('T')[0];
+}
 
 async function getModules() {
     const modulesContainer = document.getElementById('modules-container');

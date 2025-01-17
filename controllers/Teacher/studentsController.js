@@ -1,4 +1,5 @@
 const oracle = require('../../config/db');
+const daysTrait = require('../../scripts/DaysTrait')
 
 getModules = async (req, res) => {
     const teacherId = req.session.user.id; 
@@ -41,10 +42,8 @@ getStudents = async (req, res) => {
         const sessions = await connection.execute('SELECT SCHEDULE_ID , DAY_OF_WEEK FROM schedule WHERE IDM = :IDM AND IDT = :IDT AND IDTM = :IDTM', [moduleId, teacherId, typeId]);
         const students = [];
 
-        const dayOfWeek = sessions.rows[0][1]; // Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-        const daysCount = getDaysBetweenDates(fromDate, toDate, dayOfWeek);
-        console.log(daysCount);
-
+        const dayOfWeek = sessions.rows[0][1];
+        const daysCount = daysTrait.getDaysBetweenDates(fromDate, toDate, dayOfWeek);
         for (let i = 0; i < result.rows.length; i++) {
 
             const studentAttendance = await connection.execute('SELECT COUNT(*) FROM attend WHERE CODE_S = :CODE_S AND SESSION_ID = :SESSION_ID AND S_DATE BETWEEN TO_DATE(:FROMDATE, \'YYYY-MM-DD\') AND TO_DATE(:TODATE, \'YYYY-MM-DD\')', [result.rows[i][0], sessions.rows[0][0], fromDate, toDate]);
@@ -58,7 +57,8 @@ getStudents = async (req, res) => {
             });
         }
 
-        console.log(students);
+        await connection.close();
+        res.json(students);
 
     } else {
 
@@ -66,40 +66,10 @@ getStudents = async (req, res) => {
 
     }
 
-
-
-        await connection.close();
-        res.json(students);
     }
     catch (error) {
         console.error(error);
     }
 }
-
-
-const getDaysBetweenDates = (startDate, endDate, dayOfWeek) => {
-    const daysOfWeek = {
-        'Sunday': 0,
-        'Monday': 1,
-        'Tuesday': 2,
-        'Wednesday': 3,
-        'Thursday': 4,
-        'Friday': 5,
-        'Saturday': 6
-    };
-
-    const result = [];
-    const current = new Date(startDate);
-    const targetDay = daysOfWeek[dayOfWeek];
-
-    while (current <= new Date(endDate)) {
-        if (current.getDay() === targetDay) {
-            result.push(new Date(current));
-        }
-        current.setDate(current.getDate() + 1);
-    }
-
-    return result.length;
-};
 
 module.exports = { getStudents, getModules };

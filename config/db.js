@@ -10,7 +10,7 @@ async function connectToOracle() {
     });
 
     console.log('Connected to Oracle Database');
-    return connection; // Return the connection object
+    return connection;
   } catch (err) {
     console.error('Error connecting to Oracle:', err);
   }

@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded' , function(){
+    getStudents();
+});
+
 async function getStudents() {
     const Studentstable = document.getElementById('StudentsTable');
     Studentstable.innerHTML = '';
@@ -209,6 +213,3 @@ async function editStudent(id) {
         document.getElementById('groupe').value = result.student.groupe;
     }
 }
-
-
-getStudents();

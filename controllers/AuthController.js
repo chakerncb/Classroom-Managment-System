@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 
  login = async (req, res) => {
     const { email, password } = req.body;
-    let passwordHash = bcrypt.hashSync(password, 10);
     let message = '';
 
     if (!email || !password) {
