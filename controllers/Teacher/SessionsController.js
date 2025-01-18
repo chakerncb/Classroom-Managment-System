@@ -5,8 +5,8 @@ getSessions = async (req, res) => {
 
 
     // FIXME: after testing remove this line and uncomment the line below .
-    // const dayName = req.params.dayName;
-    const dayName = 'Sunday';
+    const dayName = req.params.dayName;
+    // const dayName = 'Sunday';
 
     try {
 
