@@ -62,8 +62,15 @@ const thisWeek= () => {
 }
 
 
+const getDayName = (date) => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return daysOfWeek[date.getDay()];
+}
+
+
 module.exports= {
     getDaysBetweenDates ,
     moduleDays,
-    thisWeek
+    thisWeek,
+    getDayName
 }

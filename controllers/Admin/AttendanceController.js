@@ -49,21 +49,53 @@ const getStudents = async (req, res) => {
 
 
 studentAttendance = async (req,res) => {
-    const { moduleId , fromDate , toDate , studentId} = req.body;
+    let { fromDate , toDate , studentId} = req.body;
+
+    if (!fromDate || !toDate ) {
+        let week = daysTrait.thisWeek();
+        fromDate = week.firstDay;
+        toDate = week.lastDay;
+    }
     
     try {
+    const absences = [];
+    let currentDate = new Date(fromDate);
+    const endDate = new Date(toDate);
+    const connection = await oracle();
 
-        const moduleDays = daysTrait.moduleDays;
+    while (currentDate <= endDate) {
+        const dayName = daysTrait.getDayName(currentDate);
+        const formattedDate = currentDate.toISOString().split('T')[0];
+        const Level = await connection.execute('SELECT LEVELS FROM student WHERE CODES = :CODES' , [studentId]);
+        const level = Level.rows[0][0];
+        const studentPresence = await connection.execute('SELECT SESSION_ID FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [studentId, formattedDate]);
+        const TotalSessions = await connection.execute('SELECT * FROM schedule WHERE LEVEL_NAME = :LEVEL_NAME AND DAY_OF_WEEK = :DAY_OF_WEEK' , [level , dayName]);
+        const studentPresenceCount = studentPresence.rows.length;
+        const TotalSessionsCount = TotalSessions.rows.length;
 
-        const connection = await oracle();
-        const attendance = await connection.execute('SELECT COUNT(*) FROM attend WHERE CODE_S = :CODE_S AND IDM = :IDM AND S_DATE BETWEEN TO_DATE(:FROMDATE, \'YYYY-MM-DD\') AND TO_DATE(:TODATE, \'YYYY-MM-DD\')', [studentId , moduleId , fromDate , toDate]);
+        console.log(studentPresence.rows);
 
-        console.log(attendance);
+        if (studentPresenceCount === 0) {
+            absences.push({
+                date: formattedDate,
+                dayName,
+                absenceCount: TotalSessionsCount
+            });
+        }
+        else {
+            absences.push({
+                date: formattedDate,
+                dayName,
+                absenceCount: TotalSessionsCount - studentPresenceCount
+            });
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
 
-       
+    console.log(absences);
 
-
-
+    // res.json(absences);
+    // await connection.close();
 
 
     } catch (error) {

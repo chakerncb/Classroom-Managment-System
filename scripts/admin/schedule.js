@@ -52,6 +52,7 @@ document.getElementById('module-select').addEventListener('change', async () => 
 
         semester.value = data.semester;
         level.value = data.level;
+
     }
     catch (error) {
         console.error(error);

@@ -27,5 +27,28 @@ async function getStudents() {
     } catch (error) {
         console.error(error);
     }
-    getGroupe();
 }
+
+
+async function studentAttendance(studentId) {
+
+   const card = document.getElementsByClassName('card-body')[0];
+   card.innerHTML = '';
+
+//    console.log(studentId);
+
+    try {
+        const response = await fetch('/admin/attendance/studentAttendance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ studentId })
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+

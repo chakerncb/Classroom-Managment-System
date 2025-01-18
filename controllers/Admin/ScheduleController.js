@@ -1,14 +1,16 @@
 const oracle = require('../../config/db');
 
 createSchedule = async (req, res) => {
-    const { day_of_week , idm , idtm , groupe , semester , level_name , code_c , start_time , end_time } = req.body;
+    const { day_of_week , idm , idtm , groupe , semester , level_name , code_c , start_time , end_time} = req.body;
 
     try {
         const connection = await oracle();
         // use schedule_id_seq.nextval to get the next value of the sequence
+        const teacherID = await connection.execute('SELECT IDT FROM typemodule WHERE ID = :ID AND IDM = :IDM', [idtm, idm]);
+        let idt = teacherID.rows[0][0];
         const result1 = await connection.execute('SELECT schedule_id_seq.nextval FROM dual');
         const schedule_id = result1.rows[0][0];
-        const result = await connection.execute('INSERT INTO schedule (SCHEDULE_ID , IDM , IDTM , LEVEL_NAME , CODE_C , START_TIME , END_TIME , DAY_OF_WEEK , SEMESTER , ID_GR) VALUES (:schedule_id , :IDM , :IDTM , :LEVEL_NAME , :CODE_C , TO_TIMESTAMP(:START_TIME, \'HH24:MI:SS\'), TO_TIMESTAMP(:END_TIME, \'HH24:MI:SS\'), :DAY_OF_WEEK , :SEMESTER , :ID_GR)', [schedule_id , idm , idtm , level_name , code_c , start_time , end_time , day_of_week , semester , groupe]); 
+        const result = await connection.execute('INSERT INTO schedule (SCHEDULE_ID , IDM , IDTM , LEVEL_NAME , CODE_C , START_TIME , END_TIME , DAY_OF_WEEK , SEMESTER , ID_GR , IDT) VALUES (:schedule_id , :IDM , :IDTM , :LEVEL_NAME , :CODE_C , TO_TIMESTAMP(:START_TIME, \'HH24:MI:SS\'), TO_TIMESTAMP(:END_TIME, \'HH24:MI:SS\'), :DAY_OF_WEEK , :SEMESTER , :ID_GR , :IDT)', [schedule_id , idm , idtm , level_name , code_c , start_time , end_time , day_of_week , semester , groupe , idt]); 
         await connection.execute('COMMIT');
 
         if (result.rowsAffected > 0) {

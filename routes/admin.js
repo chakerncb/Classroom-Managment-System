@@ -97,6 +97,7 @@ router.get('/attendance/students',CheckAdmin, (req, res) => {
     res.render('admin/studentsAttendance', { title: 'Students Attendance' });
 });
 router.get('/attendance/students/data',CheckAdmin, AttendanceControoler.getStudents);
+router.post('/attendance/studentAttendance',CheckAdmin, AttendanceControoler.studentAttendance);
 
 router.post('/attendance/teachers',CheckAdmin, (req,res) => {
     res.render('admin/teachersAttendance', { title: 'Teachers Attendance' });
