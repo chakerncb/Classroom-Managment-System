@@ -29,13 +29,9 @@ async function getStudents() {
     }
 }
 
-
 async function studentAttendance(studentId) {
-
    const card = document.getElementsByClassName('card-body')[0];
    card.innerHTML = '';
-
-//    console.log(studentId);
 
     try {
         const response = await fetch('/admin/attendance/studentAttendance', {
@@ -46,7 +42,19 @@ async function studentAttendance(studentId) {
             body: JSON.stringify({ studentId })
         });
         const data = await response.json();
-        console.log(data);
+
+        data.forEach(absence => {
+            const row = document.createElement('div');
+            row.classList.add('mb-3', 'p-3', 'border', 'rounded', 'bg-light');
+            row.innerHTML = `
+                <p class="mb-1"><strong>${absence.count} Absence(s)</strong></p>
+                <p class="mb-1">${absence.dayName} / ${absence.date}</p>
+                <p class="mb-1">${absence.session}</p>
+                <hr>
+            `;
+            card.appendChild(row);
+        });
+
     } catch (error) {
         console.error(error);
     }

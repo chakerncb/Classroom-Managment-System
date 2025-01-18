@@ -31,7 +31,7 @@ const getStudents = async (req, res) => {
                     fname: result.rows[i][1],
                     lname: result.rows[i][2],
                     level: result.rows[i][3],
-                    attendanceRate: attendanceRate.toFixed(0),
+                    attendanceRate: attendanceRate.toFixed(1),
                 });
             }
             
@@ -66,36 +66,65 @@ studentAttendance = async (req,res) => {
     while (currentDate <= endDate) {
         const dayName = daysTrait.getDayName(currentDate);
         const formattedDate = currentDate.toISOString().split('T')[0];
-        const Level = await connection.execute('SELECT LEVELS FROM student WHERE CODES = :CODES' , [studentId]);
+        const Level = await connection.execute('SELECT LEVELS , ID_GR FROM student WHERE CODES = :CODES' , [studentId]);
         const level = Level.rows[0][0];
+        const group = Level.rows[0][1];
         const studentPresence = await connection.execute('SELECT SESSION_ID FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [studentId, formattedDate]);
         const TotalSessions = await connection.execute('SELECT * FROM schedule WHERE LEVEL_NAME = :LEVEL_NAME AND DAY_OF_WEEK = :DAY_OF_WEEK' , [level , dayName]);
         const studentPresenceCount = studentPresence.rows.length;
         const TotalSessionsCount = TotalSessions.rows.length;
 
-        console.log(studentPresence.rows);
+        let TodaySessions = [];
+        for (let i = 0; i < TotalSessionsCount; i++) {
+            TodaySessions.push(TotalSessions.rows[i][0]);
+        }
 
-        if (studentPresenceCount === 0) {
-            absences.push({
-                date: formattedDate,
-                dayName,
-                absenceCount: TotalSessionsCount
-            });
+        let studentPresenceSessions = [];
+        for (let i = 0; i < studentPresenceCount; i++) {
+            studentPresenceSessions.push(studentPresence.rows[i][0]);
         }
-        else {
-            absences.push({
-                date: formattedDate,
-                dayName,
-                absenceCount: TotalSessionsCount - studentPresenceCount
-            });
+
+        // filter the sessions that the student attended
+
+        for (let i = 0; i < studentPresenceCount; i++) {
+            const index = TodaySessions.indexOf(studentPresenceSessions[i]);
+            if (index > -1) {
+                TodaySessions.splice(index, 1);
+            }
         }
+        
+            const sessionCount = {};
+            for (const session of TodaySessions) {
+                const sessionDetails = await connection.execute('SELECT * FROM schedule WHERE SCHEDULE_ID = :SESSION_ID', [session]);
+                if (sessionDetails.rows[0][9] === 0 || sessionDetails.rows[0][9] === group ){
+                if (sessionDetails.rows.length > 0) {
+                    const module = await connection.execute('SELECT NAME FROM module WHERE IDM = :IDM', [sessionDetails.rows[0][1]]);
+                    const moduleName = module.rows[0][0];
+                    if (sessionCount[moduleName]) {
+                        sessionCount[moduleName]++;
+                    } else {
+                        sessionCount[moduleName] = 1;
+                    }
+                }
+            }
+            }
+
+            for (const [moduleName, count] of Object.entries(sessionCount)) {
+                absences.push({
+                    date: formattedDate,
+                    session: moduleName,
+                    count: count,
+                    dayName
+                });
+            }
+
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    console.log(absences);
+    // console.log(absences);
 
-    // res.json(absences);
-    // await connection.close();
+    res.json(absences);
+    await connection.close();
 
 
     } catch (error) {
