@@ -215,3 +215,18 @@
   .list-group {
     display: none;
   }
+
+
+  @media (max-width: 768px) {
+    #filter-card {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+
+
+  
