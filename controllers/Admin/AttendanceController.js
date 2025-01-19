@@ -7,8 +7,8 @@ const getStudents = async (req, res) => {
 
     let level = 'RTW2';
     const week = daysTrait.thisWeek();
-    const fromDate = week.firstDay;
-    const toDate = week.lastDay;
+    let fromDate = week.firstDay;
+    let toDate = week.lastDay;
 
     try {
         const connection = await oracle();
@@ -55,6 +55,9 @@ studentAttendance = async (req,res) => {
         let week = daysTrait.thisWeek();
         fromDate = week.firstDay;
         toDate = week.lastDay;
+        if (new Date(toDate) > new Date()) {
+            toDate = new Date().toISOString().split('T')[0];
+        }
     }
     
     try {
@@ -63,12 +66,14 @@ studentAttendance = async (req,res) => {
     const endDate = new Date(toDate);
     const connection = await oracle();
 
+    let fullName = '';
     while (currentDate <= endDate) {
         const dayName = daysTrait.getDayName(currentDate);
         const formattedDate = currentDate.toISOString().split('T')[0];
-        const Level = await connection.execute('SELECT LEVELS , ID_GR FROM student WHERE CODES = :CODES' , [studentId]);
-        const level = Level.rows[0][0];
-        const group = Level.rows[0][1];
+        const Level = await connection.execute('SELECT * FROM student WHERE CODES = :CODES' , [studentId]);
+        fullName = Level.rows[0][1] + ' ' + Level.rows[0][2];
+        const level = Level.rows[0][3];
+        const group = Level.rows[0][5];
         const studentPresence = await connection.execute('SELECT SESSION_ID FROM attend WHERE CODE_S = :CODE_S AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [studentId, formattedDate]);
         const TotalSessions = await connection.execute('SELECT * FROM schedule WHERE LEVEL_NAME = :LEVEL_NAME AND DAY_OF_WEEK = :DAY_OF_WEEK' , [level , dayName]);
         const studentPresenceCount = studentPresence.rows.length;
@@ -123,7 +128,7 @@ studentAttendance = async (req,res) => {
 
     // console.log(absences);
 
-    res.json(absences);
+    res.json({absences , fullName , fromDate , toDate});
     await connection.close();
 
 
