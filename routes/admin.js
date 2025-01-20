@@ -93,14 +93,19 @@ router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
 
 
 // Attendance routes
+
 router.get('/attendance/students',CheckAdmin, (req, res) => {
     res.render('admin/studentsAttendance', { title: 'Students Attendance' });
 });
 router.get('/attendance/students/data',CheckAdmin, AttendanceControoler.getStudents);
 router.post('/attendance/studentAttendance',CheckAdmin, AttendanceControoler.studentAttendance);
 
-router.post('/attendance/teachers',CheckAdmin, (req,res) => {
-    res.render('admin/teachersAttendance', { title: 'Teachers Attendance' });
+
+router.get('/attendance/teachers',CheckAdmin, (req,res) => {
+    res.render('admin/teacherAttendance', { title: 'Teachers Attendance' });
 });
+router.get('/attendance/teachers/data',CheckAdmin, AttendanceControoler.getTeachers);
+// router.post('/attendance/teacherAttendance',CheckAdmin, AttendanceControoler.teacherAttendance);
+
 
 module.exports = router;

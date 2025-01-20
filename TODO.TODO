@@ -1,5 +1,6 @@
 
 - MAKE THE ATTEND WITH THE ID OF THE STUDENT AND THE ID OF SESSION AND THE date of the session.
 
-
 - add another validation on the teacher middleware to check if the teacher is the teacher of the session or not.
+
+- add S_date as a primary key in the attend table.

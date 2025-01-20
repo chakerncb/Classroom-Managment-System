@@ -145,8 +145,7 @@ storeAttendance = async (req, res) => {
     }
     catch (err) {
         console.error(err);
-        res.json({ success : false , message: 'Error storing attendance' });
-        res.sendStatus(500);
+        res.sendStatus(500).json({ success : false , message: 'Error storing attendance' });
     }
 }
 
