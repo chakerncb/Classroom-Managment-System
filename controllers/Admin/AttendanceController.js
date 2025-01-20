@@ -224,63 +224,74 @@ getTeachers = async (req,res) => {
 }
 
 
-TeacherAttendance = async (req,res) => {
-        const week = daysTrait.thisWeek();
-        let fromDate = week.firstDay;
-        let toDate = week.lastDay;
+teacherAttendance = async (req,res) => {
+    let { fromDate , toDate , teacherId} = req.body;
+
+    if (!fromDate || !toDate ) {
+        let week = daysTrait.thisWeek();
+        fromDate = week.firstDay;
+        toDate = week.lastDay;
+        if (new Date(toDate) > new Date()) {
+            toDate = new Date().toISOString().split('T')[0];
+        }
+    }
     
         try {
             const connection = await oracle();
-            const result = await connection.execute('SELECT * FROM teacher');
-    
-            if (result.rows.length > 0) {
-                const teachers = [];
-                for (let i = 0; i < result.rows.length; i++) {
-                    const teacherId = result.rows[i][0];
-                    const teacherName = result.rows[i][1] + ' ' + result.rows[i][2];
-                    const attendanceByDay = {};
-    
-                    let currentDate = new Date(fromDate);
-                    const endDate = new Date(toDate);
-    
-                    while (currentDate <= endDate) {
-                        const formattedDate = currentDate.toISOString().split('T')[0];
-                        const dayName = daysTrait.getDayName(currentDate);
-    
-                        const TotalSessions = await connection.execute('SELECT SCHEDULE_ID FROM schedule WHERE IDT = :IDT AND DAY_OF_WEEK = :DAY_OF_WEEK', [teacherId, dayName]);
-                        const TotalSessionsCount = TotalSessions.rows.length;
-                        const sessions = TotalSessions.rows;
-    
-                        let attendance = 0;
-                        for (let j = 0; j < sessions.length; j++) {
-                            const sessionId = sessions[j][0];
-                            const teacherPresence = await connection.execute('SELECT * FROM attend WHERE IDT = :IDT AND SESSION_ID = :SESSION_ID AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [teacherId, sessionId, formattedDate]);
-                            if (teacherPresence.rows.length > 0) {
-                                attendance++;
-                            }
-                        }
-    
-                        attendanceByDay[formattedDate] = {
-                            totalSessions: TotalSessionsCount,
-                            attendance: attendance
-                        };
-    
-                        currentDate.setDate(currentDate.getDate() + 1);
+            const result = await connection.execute('SELECT * FROM teacher WHERE IDT = :IDT', [teacherId]);
+
+            const teacherName = result.rows[0][1] + ' ' + result.rows[0][5];
+            let currentDate = new Date(fromDate);
+            const endDate = new Date(toDate);
+
+            let absentSessions = [];
+            let absentSessionsDetails = [];
+            let dates = [];
+
+
+            while (currentDate <= endDate) {
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                const dayName = daysTrait.getDayName(currentDate);
+
+                const TotalSessions = await connection.execute('SELECT SCHEDULE_ID FROM schedule WHERE IDT = :IDT AND DAY_OF_WEEK = :DAY_OF_WEEK', [teacherId, dayName]); 
+                const sessions = TotalSessions.rows;
+
+                let absence = 0;
+                for (let j = 0; j < sessions.length; j++) {
+                    const sessionId = sessions[j][0];
+                    const teacherPresence = await connection.execute('SELECT * FROM attend WHERE IDT = :IDT AND SESSION_ID = :SESSION_ID AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [teacherId, sessionId, formattedDate]);
+                    if (teacherPresence.rows.length === 0) {
+                        absence++;
+                        absentSessions.push(sessionId);
+                        dates.push(formattedDate);
+
                     }
-    
-                    teachers.push({
-                        id: teacherId,
-                        name: teacherName,
-                        attendanceByDay: attendanceByDay
-                    });
                 }
-                
-                res.json(teachers);
-            } else {
-                res.json([]);
-            }
-    
+
+            currentDate.setDate(currentDate.getDate() + 1);
+
         }
+
+        for (let i = 0; i < absentSessions.length; i++) {
+            const sessionDetails = await connection.execute('SELECT * FROM schedule WHERE SCHEDULE_ID = :SESSION_ID', [absentSessions[i]]);
+            const formattedDate = dates[i];
+            const module = await connection.execute('SELECT NAME FROM module WHERE IDM = :IDM', [sessionDetails.rows[0][1]]);
+            const type = await connection.execute('SELECT NAMET FROM typemodule WHERE ID = :ID AND IDM = :IDM', [sessionDetails.rows[0][2], sessionDetails.rows[0][1]]);
+            const groupName = await connection.execute('SELECT NAME FROM groupe WHERE ID_G = :ID_G', [sessionDetails.rows[0][9]]);
+            const moduleName = module.rows[0][0];
+            const typeName = type.rows[0][0];
+            const group = groupName.rows[0][0];
+            absentSessionsDetails.push({
+                date: formattedDate,
+                day: sessionDetails.rows[0][7],
+                session: moduleName + '-' + '(' +typeName+ '-'+ group +')'
+            });
+        }
+
+        // console.log(absentSessionsDetails);
+            res.json({ teacherName , absentSessionsDetails , fromDate , toDate});
+        }
+                
         catch (error) {
             console.log(error);
         }
@@ -292,5 +303,5 @@ module.exports = {
     getStudents,
     studentAttendance,
     getTeachers,
-    TeacherAttendance
+    teacherAttendance
 }

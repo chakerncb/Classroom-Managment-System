@@ -7,7 +7,7 @@ const StudentsController = require('../controllers/Admin/StudentsController');
 const ModulesController = require('../controllers/Admin/ModulesController');
 const ScheduleController = require('../controllers/Admin/ScheduleController');
 const classroomController = require('../controllers/Admin/ClassroomController');
-const AttendanceControoler = require('../controllers/Admin/AttendanceController');
+const AttendanceController = require('../controllers/Admin/AttendanceController');
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -97,15 +97,15 @@ router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
 router.get('/attendance/students',CheckAdmin, (req, res) => {
     res.render('admin/studentsAttendance', { title: 'Students Attendance' });
 });
-router.get('/attendance/students/data',CheckAdmin, AttendanceControoler.getStudents);
-router.post('/attendance/studentAttendance',CheckAdmin, AttendanceControoler.studentAttendance);
+router.get('/attendance/students/data',CheckAdmin, AttendanceController.getStudents);
+router.post('/attendance/studentAttendance',CheckAdmin, AttendanceController.studentAttendance);
 
 
 router.get('/attendance/teachers',CheckAdmin, (req,res) => {
     res.render('admin/teacherAttendance', { title: 'Teachers Attendance' });
 });
-router.get('/attendance/teachers/data',CheckAdmin, AttendanceControoler.getTeachers);
-// router.post('/attendance/teacherAttendance',CheckAdmin, AttendanceControoler.teacherAttendance);
+router.get('/attendance/teachers/data',CheckAdmin, AttendanceController.getTeachers);
+router.post('/attendance/teacherAttendance',CheckAdmin, AttendanceController.teacherAttendance);
 
 
 module.exports = router;
