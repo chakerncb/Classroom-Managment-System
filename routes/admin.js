@@ -89,6 +89,7 @@ router.post('/schedule/delete', CheckAdmin, ScheduleController.deleteSchedule);
 
 
 // classroom routes
+
 router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
 
 

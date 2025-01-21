@@ -4,6 +4,8 @@ const checkTeacher = require('../middleware/TeacherAuthinticate');
 const TeacherScheduleController = require('../controllers/Teacher/TeacherScheduleController');
 const SessionsController = require('../controllers/Teacher/SessionsController');
 const StudentsController = require('../controllers/Teacher/studentsController');
+const ClassroomController = require('../controllers/Teacher/ClassroomController');
+
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -38,6 +40,11 @@ router.get('/students', checkTeacher, (req, res) => {
 });
 router.post('/students/data', checkTeacher, StudentsController.getStudents);
 router.get('/modules/data', checkTeacher, StudentsController.getModules);
+
+// classroom routes
+
+// Teacher classroom routes
+router.get('/classrooms/availability', checkTeacher, ClassroomController.getClassrooms);
 
 
 module.exports = router;
