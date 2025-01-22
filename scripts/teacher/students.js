@@ -75,6 +75,10 @@ async function getModules() {
 async function getStudents(moduleId , typeId) {
     const studentsContainer = document.getElementById('students-container');
     studentsContainer.innerHTML = ''; 
+
+    let filterButton = document.getElementById('filter');
+    filterButton.onclick = () => getStudents(moduleId , typeId);
+
     const fromDate = document.getElementById('from').value;
     const toDate = document.getElementById('to').value;
 

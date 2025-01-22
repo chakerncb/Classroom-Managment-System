@@ -37,7 +37,8 @@ const bcrypt = require('bcryptjs');
     } catch (error) {
         console.error(error);
         message = 'Invalid email or password';
-        res.render('auth/login', { message });
+        title = 'Login Page';
+        res.render('auth/login', { message , title });
     } 
 }
 

@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 // users login
 
 app.get('/login', (req, res) => {
-    res.render('auth/login', { title: 'Login' });
+    res.render('auth/login', { title: 'Login Page' });
 });
 
 app.post('/login', AuthController.login);

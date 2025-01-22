@@ -6,11 +6,9 @@ getClassrooms = async (req, res) => {
     const today = new Date();
     const date = today.toISOString().split('T')[0];
     const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
-    const time = today.getHours() + ":" + today.getMinutes()
-    // const time = '10:30:00';
+    // const time = today.getHours() + ":" + today.getMinutes();
+    const time = '08:30';
 
-
-    console.log(date ,dayName , time); 
 
     try {
         const connection = await oracle();
@@ -53,8 +51,8 @@ getClassrooms = async (req, res) => {
                 adjustedTime.setMinutes(adjustedTime.getMinutes() + 30);
                 adjustedTime = adjustedTime.toISOString().split('T')[1].split(':').slice(0, 2).join(':');
 
+                if (time <= adjustedTime) {
 
-                if (time < adjustedTime) {
                         const classroom = {
                             classroomID,
                             available: false,
@@ -62,6 +60,7 @@ getClassrooms = async (req, res) => {
                         }
                         classrooms.push(classroom);
                     } else {
+
                         const classroom = {
                             classroomID,
                             available: true,
@@ -77,6 +76,7 @@ getClassrooms = async (req, res) => {
 
                 }
                 else {
+
                     const classroom = {
                         classroomID,
                         available: true,
