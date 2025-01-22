@@ -13,11 +13,11 @@ router.use((req, res, next) => {
 });
 
 router.get('/', checkTeacher, (req, res) => {
-    res.render('teacher/index', { title: 'Teacher' });
+    res.render('teacher/index', { title: 'Teacher Dashboard' });
 });
 
 router.get('/mySchedule', checkTeacher, (req, res) => {
-    res.render('teacher/mySchedule', { title: 'My Schedule' });
+    res.render('teacher/mySchedule', { title: 'My Schedule Page' });
 });
 router.get('/schedule/:teacherId', checkTeacher, TeacherScheduleController.getSchedule);
 
@@ -25,7 +25,7 @@ router.get('/schedule/:teacherId', checkTeacher, TeacherScheduleController.getSc
 // sessions routes
 
 router.get('/sessions', checkTeacher, (req, res) => {
-    res.render('teacher/sessions', { title: 'Sessions' });
+    res.render('teacher/sessions', { title: 'Today Sessions Page' });
 });
 
 router.get('/sessions/:teacherId/:dayName', checkTeacher, SessionsController.getSessions);
@@ -36,7 +36,7 @@ router.post('/sessions/attendance', checkTeacher, SessionsController.storeAttend
 // students routes
 
 router.get('/students', checkTeacher, (req, res) => {
-    res.render('teacher/students', { title: 'Students' });
+    res.render('teacher/students', { title: 'Students Attendance page' });
 });
 router.post('/students/data', checkTeacher, StudentsController.getStudents);
 router.get('/modules/data', checkTeacher, StudentsController.getModules);
