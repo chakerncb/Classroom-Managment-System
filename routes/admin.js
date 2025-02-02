@@ -90,7 +90,12 @@ router.post('/schedule/delete', CheckAdmin, ScheduleController.deleteSchedule);
 
 // classroom routes
 
+router.get('/classrooms',CheckAdmin, (req, res) => {
+    res.render('admin/classrooms', { title: 'Classrooms' });
+});
+router.post('/classrooms',CheckAdmin, classroomController.addClassroom);
 router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
+router.post('/classrooms/delete',CheckAdmin, classroomController.deleteClassroom);
 
 
 // Attendance routes

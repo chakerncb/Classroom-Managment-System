@@ -8,8 +8,8 @@ async function getSessions() {
     const teacherId = document.getElementById('teacherId').value;
     const today = new Date().toISOString().split('T')[0];
     const dayName = new Date(today).toLocaleDateString('en-US', { weekday: 'long' });
-    // const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-    const time = '08:39';
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    // const time = '08:39';
     const sessionsContainer = document.getElementById('sessions-container');
 
     try {
