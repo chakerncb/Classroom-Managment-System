@@ -95,6 +95,8 @@ router.get('/classrooms',CheckAdmin, (req, res) => {
 });
 router.post('/classrooms',CheckAdmin, classroomController.addClassroom);
 router.get('/classrooms/data',CheckAdmin, classroomController.getClassrooms);
+router.post('/classroom/edit',CheckAdmin, classroomController.editClassroom);
+router.post('/classroom/update',CheckAdmin, classroomController.updateClassroom);
 router.post('/classrooms/delete',CheckAdmin, classroomController.deleteClassroom);
 
 

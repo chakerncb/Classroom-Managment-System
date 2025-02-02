@@ -84,7 +84,7 @@
                     <input type="text" id="clssroom_id" name="id" hidden>
                     <div class="mb-3">
                         <label for="code" class="form-label">Code</label>
-                        <input type="text" id="clssroom_code" name="code" class="form-control" required placeholder="Classroom code">
+                        <input type="text" id="code" name="code" class="form-control" required placeholder="Classroom code">
                     </div>
                     <div class="mb-3">
                         <label for="capacity" class="form-label">Classroom Capacity</label>
@@ -92,14 +92,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="type" class="form-label">Classroom Type</label>
-                        <select class="form-select" id="clssroom_type" name="type" required>
+                        <select class="form-select" id="type" name="type" required>
                             <option value="">Select Classroom Type</option>
                             <option value="SIMPEL">SIMPEL</option>
-                            <option value="PRACTICLE">PRACTICLE</option>
+                            <option value="PRACTICAL">PRACTICAL</option>
                         </select>
                         
                     </div>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-secondary" onclick="closeForm()">Close</button>
                 </form>
             </div>
@@ -115,6 +115,14 @@
     <script src="/public/js/theme.js"></script>
     <script src="/scripts/admin/classrooms.js"></script>
     <script src="/public/js/script.js"></script>
+    <script>
+        function closeForm() {
+            document.getElementsByClassName('form-title')[0].innerText = 'Add Classroom';
+            document.getElementById('registrationForm').reset();
+            document.getElementById('modal-form').style.display = 'none';
+        }
+
+    </script>
 
 </body>
 </html>
