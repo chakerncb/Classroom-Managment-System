@@ -7,20 +7,28 @@ getClassrooms = async (req, res) => {
     const date = today.toISOString().split('T')[0];
     const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
     // const time = today.getHours() + ":" + today.getMinutes();
-    const time = '08:30';
+    const time = '11:10';
 
 
     try {
         const connection = await oracle();
         const result = await connection.execute('SELECT * FROM classroom');
+        console.log(result.rows);
+
         if (result.rows.length > 0) {
             const classrooms = [];
             
             for (let i = 0; i < result.rows.length; i++) {
                 const classroomID = result.rows[i][2];
-                const classroomSessions = await connection.execute('SELECT * FROM schedule WHERE CODE_C = :classroomID AND DAY_OF_WEEK = :dayName AND START_TIME <= TO_DATE(:time, \'HH24:MI:SS\') AND END_TIME >= TO_DATE(:time, \'HH24:MI:SS\')', [classroomID, dayName, time]);
+                console.log(classroomID);
+                const classroomSessions = await connection.execute(
+                    'SELECT * FROM schedule WHERE CODE_C = :classroomID AND DAY_OF_WEEK = :dayName AND :time BETWEEN TO_CHAR(START_TIME, \'HH24:MI\') AND TO_CHAR(END_TIME, \'HH24:MI\') ', 
+                    { classroomID, dayName, time }
+                );
               
                 if (classroomSessions.rows.length > 0) { // check if the class reserved in this time of day
+
+                    console.log('yes');
 
                     const sessionID = classroomSessions.rows[0][0];
                     const classroomTaken = await connection.execute('SELECT * FROM attend WHERE SESSION_ID = :SESSION_ID AND S_DATE = TO_DATE(:S_DATE, \'YYYY-MM-DD\')', [sessionID, date]);
@@ -76,6 +84,8 @@ getClassrooms = async (req, res) => {
 
                 }
                 else {
+
+                    console.log('no');
 
                     const classroom = {
                         classroomID,

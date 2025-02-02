@@ -126,8 +126,6 @@ studentAttendance = async (req,res) => {
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    // console.log(absences);
-
     res.json({absences , fullName , fromDate , toDate});
     await connection.close();
 
