@@ -60,6 +60,28 @@ getGroupe = async (req, res) => {
     }
 }
 
+
+getLevels = async (req, res) => {
+
+    try {
+        const connection = await oracle();
+        const result = await connection.execute('SELECT * FROM LEVELS');
+        if (result.rows.length > 0) {
+            const levels = [];
+            for (let i = 0; i < result.rows.length; i++) {
+                levels.push({
+                    id: result.rows[i][0],
+                    name: result.rows[i][1]
+                });
+            }
+            res.json(levels);
+        }
+        
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 createStudent = async (req, res) => {
     try {
         const { code, fname, lname, level, speciality, groupe } = req.body;
@@ -181,13 +203,6 @@ updateStudent = async (req, res) => {
         return res.json({ success: false, message: 'Groupe not found' });
     }
 
-    // code already exists
-
-    const codeExists = await connection.execute('SELECT * FROM student WHERE CODES = :CODES', [code]);
-    if (codeExists.rows.length === 0) {
-        return res.json({ success: false, message: 'ID not found' });
-    }
-
     try {
 
         const result = await connection.execute('UPDATE student SET FNAME = :fname, LNAME = :lname, LEVELS = :levels, SPECIALITY = :speciality, ID_GR = :groupe WHERE CODES = :codes', [fname, lname, level, speciality, groupe, code]);
@@ -200,4 +215,4 @@ updateStudent = async (req, res) => {
     }
 }
 
-module.exports = { getStudents , createStudent , deleteStudent , getGroupe , editStudent , updateStudent };
+module.exports = { getStudents , createStudent , deleteStudent , getGroupe , getLevels , editStudent , updateStudent };

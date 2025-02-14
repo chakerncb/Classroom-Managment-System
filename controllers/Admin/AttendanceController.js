@@ -5,7 +5,7 @@ const daysTrait = require('../../scripts/DaysTrait')
 
 const getStudents = async (req, res) => {
 
-    let level = 'RTW2';
+    let level = 'RTW';
     const week = daysTrait.thisWeek();
     let fromDate = week.firstDay;
     let toDate = week.lastDay;

@@ -48,6 +48,7 @@ router.get('/students',CheckAdmin , (req, res) => {
 });
 router.get('/students/data',CheckAdmin, StudentsController.getStudents);
 router.get('/students/groupe',CheckAdmin, StudentsController.getGroupe);
+router.get('/students/level',CheckAdmin, StudentsController.getLevels);
 router.post('/students',CheckAdmin, StudentsController.createStudent);
 router.post('/students/delete',CheckAdmin, StudentsController.deleteStudent);
 router.post('/students/edit',CheckAdmin, StudentsController.editStudent);

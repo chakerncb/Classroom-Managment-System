@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded' , function(){
     getStudents();
+    getGroupe();
+    getLevels();
 });
 
 async function getStudents() {
@@ -30,7 +32,6 @@ async function getStudents() {
     } catch (error) {
         console.error(error);
     }
-    getGroupe();
 }
 
 async function getGroupe() {
@@ -55,6 +56,30 @@ async function getGroupe() {
     } catch (error) {
         console.error(error);
     }   
+}
+
+
+async function getLevels() {
+    const levelSelect = document.getElementById('level_select');
+    levelSelect.innerHTML = '';
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = 'Select Level';
+    levelSelect.appendChild(option);
+
+    try {
+        const response = await fetch('/admin/students/level');
+        const data = await response.json();
+
+        data.forEach(level => {
+            const option = document.createElement('option');
+            option.value = level.id;
+            option.textContent = level.id + ' (' + level.name + ')';
+            levelSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 document.querySelector('form#registrationForm').addEventListener('submit', async (event) => {
@@ -191,6 +216,7 @@ async function deleteStudent(id) {
 async function editStudent(id) {
     document.querySelector('.form-title').textContent = 'Edit Student';    
     document.getElementById('modal-form').style.display = 'block';
+    document.getElementById('student_code').readOnly = true;
     // document.getElementById('passwordField').style.display = 'none';
     // document.getElementById('registrationForm').action = '/admin/teachers/update';
 

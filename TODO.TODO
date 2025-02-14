@@ -10,3 +10,7 @@
 - make the dashboard of the teacher to show the upcoming sessions.
 
 - add a semester table with the start date and the end date of the semester.
+
+- add level table with the level name and the level number (for show the modules by level). @done
+
+- add department table to make each department has its own modules,levels,teachers and students.
