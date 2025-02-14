@@ -3,8 +3,18 @@ const oracle = require('../../config/db');
 getModules = async (req, res) => {
     try {
         const connection = await oracle();
+        const result3 = await connection.execute('SELECT * FROM LEVELS');
         const result = await connection.execute('SELECT * FROM module');
         const result2 = await connection.execute('SELECT * FROM typemodule');
+
+        const levels = [];
+
+        for (let i = 0; i < result3.rows.length; i++) {
+            levels.push({
+                id: result3.rows[i][0],
+                name: result3.rows[i][1],
+            });
+        }
 
         if (result.rows.length > 0) {
             const modules = [];
@@ -13,6 +23,7 @@ getModules = async (req, res) => {
                     id: result.rows[i][0],
                     name: result.rows[i][1],
                     semester: result.rows[i][3],
+                    level: result.rows[i][2],
                 });
             }
 
@@ -27,9 +38,9 @@ getModules = async (req, res) => {
                 });
             }
 
-            res.json({ success: true, modules, types });
+            res.json({ success: true, modules, types, levels });
         } else {
-            res.json({ success: false, modules: [], types: [] });
+            res.json({ success: false, modules: [], types: [], levels: [] });
         }
         await connection.close();
     } catch (err) {
@@ -37,7 +48,6 @@ getModules = async (req, res) => {
         res.sendStatus(500);
     }
 }
-
 
 createModule = async (req, res) => {
     const { name, level , semester } = req.body;
@@ -60,7 +70,6 @@ createModule = async (req, res) => {
     }
 }
 
-
 createType = async (req, res) => {
     const { type_id , module_id, teacher_id } = req.body;
 
@@ -80,8 +89,6 @@ createType = async (req, res) => {
          return res.json({ success: false, message: 'Invalid type'+type_id });
     }
 
-
-
     try {
         const connection = await oracle();
         const result = await connection.execute('INSERT INTO typemodule (ID, IDM, NAMET, IDT) VALUES (:ID, :IDM, :NAMET, :IDT)', [type_id ,module_id, name, teacher_id]);
@@ -97,7 +104,6 @@ createType = async (req, res) => {
         res.sendStatus(500);
     }
 }
-
 
 deleteType = async (req, res) => {
     const { id , module_id} = req.body;

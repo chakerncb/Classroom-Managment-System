@@ -18,12 +18,26 @@
                     <h3 class="text-dark mb-4">Modules</h3>
                     <div class="card shadow">
                         <div class="card-header py-3 flex-column justify-content-between align-items-center"> 
-                            <p class="text-primary m-0 fw-bold">Info PRO</p>
+                            <p class="text-primary m-0 fw-bold">Modules :</p>
                             <button style="float: right;" class="btn btn-primary" onclick="openForm()">Add Module</button>
                         </div>
+                        <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 text-nowrap">
+                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                                    <label class="form-label">Filter&nbsp;
+                                        <select id="levelFilter" onchange="filterModulesByLevel()" class="d-inline-block form-select form-select-sm">
+                                        </select>&nbsp;</label></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="semesters-card row">
                             <!-- Add 'row' class here to enable side-by-side layout -->
                         </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,7 +63,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="level" class="form-label">Module Level</label>
-                        <input type="text" id="level" name="level" class="form-control" required placeholder="Module Level">
+                        <select id="level-select" name="level" class="form-select" required>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="semester" class="form-label">Semester</label>
