@@ -7,7 +7,8 @@ getClassrooms = async (req, res) => {
     const date = today.toISOString().split('T')[0];
     const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
     const time = today.getHours() + ":" + today.getMinutes();
-    // const time = '11:40';
+    // console.log(time);
+    // const time = '09:30';
 
 
     try {
