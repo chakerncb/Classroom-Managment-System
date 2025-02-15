@@ -1,15 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    getModules();
+    getLevels();
     getClassrooms();
-    getSchedules();
     getGroups();
 });
 
-async function getModules() {
+async function getModules(level) {
     const modulesSelect = document.getElementById('module-select');
+    modulesSelect.innerHTML = '';
+    modulesSelect.innerHTML = '<option value="">Select Module</option>';
 
     try {
-        const response = await fetch('/admin/modules/data');
+        const response = await fetch('/admin/level/modules', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ level })
+        });
         const data = await response.json();
         
         data.modules.forEach(module => {
@@ -85,7 +90,7 @@ async function getGroups(){
     try {
         const response = await fetch('/admin/students/groupe');
         const data = await response.json();
-        console.log(data);
+
         data.sort((a, b) => a.id - b.id).forEach(group => {
             const option = document.createElement('option');
             option.value = group.id;
@@ -141,29 +146,21 @@ document.querySelector('form#scheduleForm').addEventListener('submit', async (ev
 
 
 async function getSchedules() {
-
-    const promoCard = document.getElementById('promo-card');
-    promoCard.innerHTML = '';
+    const level = document.getElementById('levelFilter').value;
 
     try {
-        const response = await fetch('/admin/schedules/data');
+        const response = await fetch('/admin/schedules/data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ level: level })
+        });
+        
         const data = await response.json();
         if (data.success) {
-            const cardHeader = document.createElement('div');
-            cardHeader.className = 'card-header py-3 flex-column justify-content-between align-items-center';
-            const title = document.createElement('p');
-            title.className = 'text-primary m-0 fw-bold';
-            title.innerText = 'RTW';
-            // const addButton = document.createElement('button');
-            // addButton.className = 'btn btn-primary';
-            // addButton.style.float = 'right';
-            // addButton.innerText = 'Add Schedule';
-            // addButton.onclick = () => openScheduleForm();
-            cardHeader.appendChild(title);
-            // cardHeader.appendChild(addButton);
-            promoCard.appendChild(cardHeader);
+              const promoCard = document.getElementById('promo-card');
+               promoCard.innerHTML = '';
 
-            const scheduleContainer = document.createElement('div');
+    const scheduleContainer = document.createElement('div');
             scheduleContainer.className = 'schedule-container row';
 
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday'];
@@ -184,7 +181,6 @@ async function getSchedules() {
 
             data.schedules.filter(schedule => schedule.day_of_week === day).forEach(schedule => {
                 const listItem = document.createElement('li');
-                console.log(schedule);
                 listItem.className = 'list-group-item';
                 listItem.innerHTML = `
                 <div class="btn-group" style="float:right;">
@@ -221,6 +217,7 @@ async function getSchedules() {
             });
 
             promoCard.appendChild(scheduleContainer);
+    
         }
 
         }
@@ -230,6 +227,11 @@ async function getSchedules() {
     }
 }
 
+function filterModulesByLevel() {
+    const level = document.getElementById('levelFilter').value;
+    getSchedules(level);
+    getModules(level);
+}
 
 async function deleteSchedule(id) {
     try {
@@ -258,6 +260,26 @@ async function deleteSchedule(id) {
     }
     catch (error) {
         console.error(error);
+    }
+}
+
+async function getLevels(){
+    const levelsSelect = document.getElementById('levelFilter');
+
+    try {
+        const responce = await fetch('/admin/levels/data');
+        const data = await responce.json();
+
+        data.levels.forEach(level => {
+            const option = document.createElement('option');
+            option.value = level.id;
+            option.text =level.id +' (' + level.name + ')';
+            levelsSelect.appendChild(option);
+        });
+
+    }
+    catch (err) {
+        console.error(err);
     }
 }
 

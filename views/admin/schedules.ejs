@@ -16,8 +16,20 @@
 
                 <div class="container-fluid">
                     <h3 class="text-dark ">Schedules</h3>
-                    <div id="promo-card" class="card shadow">
+                    <div class="card shadow">
+                        <div class="card-header py-3 flex-column justify-content-between align-items-center">
+                            <div class="col-md-6 text-nowrap">
+                                <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+                                        <select id="levelFilter" onchange="filterModulesByLevel()" class="d-inline-block form-select form-select-sm">
+                                            <option value="">Select a Level</option>
+                                        </select>&nbsp;</label></div>
+                            </div>
+                            
+                        </div>
 
+                        <div id="promo-card">
+
+                        </div>
                     </div>
                 </div>
             </div>

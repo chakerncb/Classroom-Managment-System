@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     getModules();
+    getLevels();
 });
 
 async function getModules() {
@@ -27,9 +28,6 @@ async function getModules() {
                     showModules(modules.filter(module => module.level == levelFilter.value), types);
                 }
             });
-
-            showModules(modules, types);
-            
           
         }
     } catch (error) {
@@ -116,7 +114,7 @@ async function showModules(modules , types) {
                                                     </select>
                                                     <br>
                                                     <select class="form-control teacherSelect" name="teacher_id">
-                                                        <option value="">Select Teacher</option>
+                                                        <optionvalue="">Select Teacher</option>
                                                     </select>
                                                     <br>
                                                     <button onclick="addType(${module.id})" class="btn btn-primary mt-2">Add Type</button>
@@ -146,6 +144,7 @@ function showTypeForm(id) {
     const button = document.querySelector(`#addType-${id}`);
     form.parentElement.parentElement.style.display = 'table-row';
     button.style.display = 'none';
+    getTeachers();
 }
 
 function closeTypeForm(id) {
@@ -239,7 +238,7 @@ async function addType(module_id) {
             setTimeout(() => {
                 document.querySelector('.message-success').style.display = 'none';
             }, 3000);
-            getModules();
+            showModules();
         } else if (result.message) {
             document.querySelector('.message-danger').innerText = result.message;
             document.querySelector('.message-danger').style.display = 'block';
@@ -270,13 +269,34 @@ async function deleteType(id , module_id) {
             setTimeout(() => {
                 document.querySelector('.message-success').style.display = 'none';
             }, 3000);
-            getModules();
+            showModules();
         } else if (result.message) {
             document.querySelector('.message-danger').innerText = result.message;
             document.querySelector('.message-danger').style.display = 'block';
             setTimeout(() => {
                 document.querySelector('.message-danger').style.display = 'none';
             }, 3000);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function getLevels() {
+    try {
+        const response = await fetch('/admin/levels/data');
+        const result = await response.json();
+        if (result.success) {
+            const levels = result.levels;
+            const levelFilter = document.querySelector('#level-select');
+            levelFilter.innerHTML = '<option value="0">Select Level</option>';
+            levels.forEach(level => {
+                const option = document.createElement('option');
+                option.value = level.id;
+                option.innerText = level.name;
+                levelFilter.appendChild(option);
+            });
         }
     } catch (error) {
         console.log(error);

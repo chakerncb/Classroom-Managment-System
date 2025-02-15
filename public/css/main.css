@@ -228,5 +228,11 @@
     }
   }
 
+  #levelFilter {
+    color: #4E73DF;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
 
   

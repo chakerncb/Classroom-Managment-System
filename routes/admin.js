@@ -8,6 +8,7 @@ const ModulesController = require('../controllers/Admin/ModulesController');
 const ScheduleController = require('../controllers/Admin/ScheduleController');
 const classroomController = require('../controllers/Admin/ClassroomController');
 const AttendanceController = require('../controllers/Admin/AttendanceController');
+const LevelsController = require('../controllers/Admin/LevelsController');
 
 router.use((req, res, next) => {
     res.locals.session = req.session;
@@ -63,7 +64,8 @@ router.post('/students/update',CheckAdmin, StudentsController.updateStudent);
 
 // Levels routes
 
-   // TODO: Add the levels routes
+   router.get('/levels/data',CheckAdmin , LevelsController.getLevels);
+   router.post('/level/modules',CheckAdmin, LevelsController.getModules);
 
 
 // Moudules routes
@@ -84,7 +86,7 @@ router.post('/modules/type/delete',CheckAdmin, ModulesController.deleteType);
 router.get('/schedules', CheckAdmin, (req, res) => {
     res.render('admin/schedules', { title: 'Schedules' });
 });
-router.get('/schedules/data', CheckAdmin, ScheduleController.getSchedules);
+router.post('/schedules/data', CheckAdmin, ScheduleController.getSchedules);
 router.post('/schedule/add', CheckAdmin, ScheduleController.createSchedule);
 router.post('/schedule/delete', CheckAdmin, ScheduleController.deleteSchedule);
 

@@ -43,10 +43,11 @@ catch (err) {
 
 
 getSchedules = async (req, res) => {
+    const { level } = req.body;
 
     try {
         const connection = await oracle();
-        const result = await connection.execute('SELECT * FROM schedule');
+        const result = await connection.execute('SELECT * FROM schedule WHERE LEVEL_NAME = :LEVEL_NAME' , [level]);
         if (result.rows.length > 0) {
             const schedules = [];
             for (let i = 0; i < result.rows.length; i++) {
@@ -80,7 +81,7 @@ getSchedules = async (req, res) => {
             }
             res.json({ success: true, schedules });
         } else {
-            res.json({ success: false, schedules: [] });
+            res.json({ success: true, schedules: [] });
         }
         await connection.close();
     } catch (err) {
